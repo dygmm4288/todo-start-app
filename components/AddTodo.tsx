@@ -1,3 +1,4 @@
+import useTodo from "@/hooks/useTodo";
 import { useState } from "react";
 import {
   Keyboard,
@@ -8,15 +9,12 @@ import {
   View,
 } from "react-native";
 
-export default function AddTodo({
-  onInsert,
-}: {
-  onInsert: (x: string) => void;
-}) {
+export default function AddTodo() {
   const [text, setText] = useState("");
+  const { addTodo } = useTodo();
 
   const onPress = () => {
-    onInsert(text);
+    addTodo(text);
     setText("");
     Keyboard.dismiss();
   };

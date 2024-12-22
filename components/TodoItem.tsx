@@ -1,16 +1,9 @@
+import useTodo, { Todo } from "@/hooks/useTodo";
 import React from "react";
 import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { Todo } from "./TodoList";
 
-export default function TodoItem({
-  todo,
-  onToggle,
-  onRemove,
-}: {
-  todo: Todo;
-  onToggle: (id: number) => void;
-  onRemove: (id: number) => void;
-}) {
+export default function TodoItem({ todo }: { todo: Todo }) {
+  const { removeTodo, toggleTodo } = useTodo();
   const remove = () => {
     Alert.alert(
       "삭제",
@@ -20,7 +13,7 @@ export default function TodoItem({
         {
           text: "삭제",
           onPress: () => {
-            onRemove(todo.id);
+            removeTodo(todo.id);
           },
           style: "destructive",
         },
@@ -33,7 +26,7 @@ export default function TodoItem({
   };
   return (
     <View style={styles.item}>
-      <TouchableOpacity onPress={() => onToggle(todo.id)}>
+      <TouchableOpacity onPress={() => toggleTodo(todo.id)}>
         <View
           style={{ ...styles.circle, ...(todo.done ? styles.filled : {}) }}
         />
