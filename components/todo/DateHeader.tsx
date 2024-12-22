@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from "react-native";
-import { dateFormatting } from "../util/date";
+import { dateFormatting } from "../../util/date";
 
 export default function DateHeader({ date }: { date: Date }) {
   return (
