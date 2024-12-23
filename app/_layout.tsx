@@ -1,9 +1,9 @@
-import AddTodo from "@/components/todo/AddTodo";
 import DateHeader from "@/components/todo/DateHeader";
-import Empty from "@/components/todo/Empty";
-import TodoList from "@/components/todo/TodoList";
+import Footer from "@/components/ui/Footer";
 import Loading from "@/components/ui/Loading";
 import useTodo from "@/hooks/useTodo";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Slot } from "expo-router";
 import { useEffect } from "react";
 import {
   KeyboardAvoidingView,
@@ -14,41 +14,32 @@ import {
 
 export default function RootLayout() {
   const today = new Date();
-  const isEmpty = useTodo((state) => state.isEmpty());
   const isLoading = useTodo((state) => state.isLoading);
   const fetchTodo = useTodo((state) => state.fetchTodo);
+  const client = new QueryClient();
 
   useEffect(() => {
     fetchTodo();
   }, []);
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.avoid}>
-        <DateHeader date={today} />
-        {isEmpty ? <Empty /> : <TodoList />}
-        <AddTodo />
-      </KeyboardAvoidingView>
-      <Loading isLoading={isLoading} />
-    </SafeAreaView>
+    <QueryClientProvider client={client}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.avoid}>
+          <DateHeader date={today} />
+          <Slot />
+          <Loading isLoading={isLoading} />
+          <Footer />
+        </KeyboardAvoidingView>
+      </SafeAreaView>
+    </QueryClientProvider>
   );
 }
 
 const styles = StyleSheet.create({
   avoid: {
     flex: 1,
-  },
-  modal: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  modalText: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    fontSize: 50,
   },
 });
